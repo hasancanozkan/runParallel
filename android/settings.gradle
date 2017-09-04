@@ -1,3 +1,5 @@
 rootProject.name = 'runParallel'
 
 include ':app'
+include ':rn-workers'
+project(':rn-workers').projectDir = new File(rootProject.projectDir, '../node_modules/rn-workers/android')

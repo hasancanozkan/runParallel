@@ -17,10 +17,7 @@ import hamsters from 'hamsters.js';
 export default class runParallel extends Component {
     initHamsters(){
         let startOptions = {
-            maxThreads: 2,
-            cache: false,
-            debug: true,
-            persistence: true,
+            maxThreads: 1,
         };
         hamsters.init(startOptions);
         let params = {
