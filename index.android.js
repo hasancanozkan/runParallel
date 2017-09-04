@@ -12,49 +12,56 @@ import {
   View,
   TouchableOpacity
 } from 'react-native';
+import hamsters from 'hamsters.js';
 
 export default class runParallel extends Component {
+    initHamsters(){
+        let startOptions = {
+            maxThreads: 2,
+            cache: false,
+            debug: true,
+            persistence: true,
+        };
+        hamsters.init(startOptions);
+        let params = {
+            array: [1,2,3,4,5,6,7,8,9,10],
+            animal: 'Hamster',
+        };
+        hamsters.run(params, function() {
+            if(params.animal === 'Hamster') {
+                rtn.data.push('Hamsters are awesome');
+            }
+        }, function(result) {
+            console.log(result);
+        });
+    }
   counter1 () {
     let b=0;
     for (let a = 0; a < 1000000000; a++) {
           b = b+1;
     }
-    return b;
-  }
+      console.log(b);
+      return b;
+  };
   counter2 () {
       let b=0;
       for (let a = 0; a < 1000000000; a++) {
           b = b+1;
       }
+      console.log(b);
       return b;
-  }/*
-  tryParallel(){
-      const p = Parallel([1,2,3,4,5]);
-      console.log('p.data');
-      console.log(p.data);
-  }m*/
+  };
   runBoth(){
 	  this.counter1();
 	  this.counter2();
-  }
+	  this.initHamsters();
+  };
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.android.js
-        </Text>
-        <Text style={styles.instructions}>
-          Double tap R on your keyboard to reload,{'\n'}
-          Shake or press menu button for dev menu
-        </Text>
-        <View>
           <TouchableOpacity style={styles.runButton} onPress={() => this.runBoth() }>
-            <Text style={styles.buttonText}>Run</Text>
+              <Text style={styles.buttonText}>Run</Text>
           </TouchableOpacity>
-        </View>
       </View>
     );
   }
