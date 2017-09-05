@@ -13,8 +13,39 @@ import {
   TouchableOpacity
 } from 'react-native';
 import hamsters from 'hamsters.js';
+import { Worker } from 'rn-workers'
 
 export default class runParallel extends Component {
+    // I added the constructor in worker code there wasn't one.
+    constructor(props) {
+        super(props);
+        this.state = {
+            text: '',
+            count: 0
+        }
+    }
+    componentDidMount () {
+        //Create using default worker port (8082)
+        this.worker = new Worker();
+
+        //Create worker pointing to custom one
+        this.worker2 = new Worker(8083);
+
+
+        //Add listener to receve messages
+        this.worker.onmessage = message => this.setState({
+            text: message,
+            count: this.state.count + 1
+        });
+
+        //Send message to worker (Only strings is allowed for now)
+        this.worker.postMessage("Hey Worker!")
+    }
+
+    componentWillUnmount () {
+        //Terminate worker
+        this.worker.terminate();
+    }
     initHamsters(){
         let startOptions = {
             maxThreads: 1,
@@ -51,7 +82,8 @@ export default class runParallel extends Component {
   runBoth(){
 	  this.counter1();
 	  this.counter2();
-	  this.initHamsters();
+	  //this.initHamsters();
+	  console.log(this.state.text);
   };
   render() {
     return (
@@ -70,16 +102,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
   },
     runButton: {
         borderRadius: 10,
